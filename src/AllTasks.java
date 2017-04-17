@@ -1,9 +1,4 @@
 import org.lwjgl.input.Mouse;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.util.Vector;
-
 import org.newdawn.slick.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -12,6 +7,10 @@ import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.util.Vector;
 
 /**
  * Created by Marie Curie on 01/04/2017.
@@ -375,6 +374,18 @@ public class AllTasks extends BasicGameState {
             sanFranTxRegGrey.drawString(502, 540-89, "Set category");
         }
 
+        if(hasSelectedNewTask){
+            taskName.setFocus(true);
+        }
+
+        if(hasSelectedDeadline){
+            deadline.setFocus(true);
+        }
+
+        if(hasSelectedCategory){
+            category.setFocus(true);
+        }
+
         taskName.render(container, g);
         deadline.render(container, g);
         category.render(container, g);
@@ -476,6 +487,10 @@ public class AllTasks extends BasicGameState {
             sanFranTxRegGrey.drawString(51, newCatBoxYPos + 9, "Enter Category Name");
         }
 
+        if(hasSelectedCategoryName) {
+            newCategoryName.setFocus(true);
+        }
+
         newCategoryName.setLocation(21 + 30, newCatBoxYPos + 9);
         newCategoryName.render(container, g);
     }
@@ -496,34 +511,24 @@ public class AllTasks extends BasicGameState {
 
         Input input = container.getInput(); //keyboard and mouse input
 
-        if(hasSelectedNewTask){
-            taskName.setFocus(true);
-        }
-
-        if(hasSelectedDeadline){
-            deadline.setFocus(true);
-        }
-
-        if(hasSelectedCategory){
-            category.setFocus(true);
-        }
-
-        if(hasSelectedCategoryName) {
-            newCategoryName.setFocus(true);
-        }
-
         if(input.isMousePressed(0)) {
+            System.out.println(1);
             //if mouse was clicked
             if (isAddingNewTask) {
+                System.out.println(2);
                 //if user is adding new task
                 if ((xpos > 471 && xpos < 782) && (ypos > 29 && ypos < 207)) {
+                    System.out.println(3);
                     //if mouse is in newTaskBox area
                     if (xpos > 496 && xpos < 766) {
+                        System.out.println(4);
                         if (isWrongDateFormat) {
+                            System.out.println(5);
                             isWrongDateFormat = false;
                         } else {
                             //is mouse is in xpos range of the textboxes in taskBox
                             if (ypos > 137 && ypos < 162) {
+                                System.out.println(6);
                                 //has selected new task
                                 hasSelectedNewTask = true;
                                 hasSelectedDeadline = false;
@@ -611,17 +616,21 @@ public class AllTasks extends BasicGameState {
             } else if (isAddingNewCategory){
                 if(!isCatAlreadyExists){
                     if(!(xpos >= 21 && xpos <= 21+newCategoryBox.getWidth() && ypos <= 540 - newCatBoxYPos && ypos >= 540 - (newCatBoxYPos + newCategoryBox.getHeight()))) {
+                        //if clicks outside the box
                         isAddingNewCategory = false;
-                        initialize(newCategoryName);
                     } else {
+                        //if clicks inside the box
                         if (xpos >= newCategoryName.getX() && xpos <= newCategoryName.getX() + newCategoryName.getWidth() && ypos <= 540-newCategoryName.getY() && ypos >= 540 - newCategoryName.getY() - newCategoryName.getHeight()) {
+                            //if clicks in textfield
                             hasSelectedCategoryName = true;
                         } else if (xpos >= 180 && xpos <= 215 && ypos <= 540 - (newCatBoxYPos + 30) && ypos >= 540 -(newCatBoxYPos + 44)){
+                            //if clicks ok
                             if(categories.contains(newCategoryName.getText())) {
                                 isCatAlreadyExists = true;
                             }
                             else {
                                 isAddingNewCategory = false;
+                                isCatAlreadyExists = false;
                                 categories.addElement(newCategoryName.getText());
                             }
                             initialize(newCategoryName);
