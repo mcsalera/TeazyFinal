@@ -13,7 +13,7 @@ public class EditUsername extends BasicGameState {
     public TextField username;
     public TextField password;
     public String mouse = "";
-    public boolean isFirstTimeUsername = true;
+    public boolean isFirstTimeUsername = true, noteditusername = true;
 
     public EditUsername(int editusername) {
     }
@@ -26,7 +26,7 @@ public class EditUsername extends BasicGameState {
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         container.setShowFPS(false);
-        isFirstTimeUsername = true;
+        isFirstTimeUsername = noteditusername = true;
         firstname = new TextField(container, container.getDefaultFont(), 233, 188, 198, 23);
         lastname = new TextField(container,container.getDefaultFont(),442,188,127,23);
         username = new TextField(container,container.getDefaultFont(),233,300,335,23);
@@ -39,7 +39,6 @@ public class EditUsername extends BasicGameState {
         firstname.setFocus(false);
         firstname.setConsumeEvents(false);
         firstname.setAcceptingInput(false);
-        firstname.setText("Noah Dominic");
 
         lastname.setBorderColor(Color.transparent);
         lastname.setBackgroundColor(Color.transparent);
@@ -48,7 +47,6 @@ public class EditUsername extends BasicGameState {
         lastname.setFocus(false);
         lastname.setConsumeEvents(false);
         lastname.setAcceptingInput(false);
-        lastname.setText("Silvio");
 
         username.setBorderColor(Color.transparent);
         username.setBackgroundColor(Color.transparent);
@@ -57,7 +55,6 @@ public class EditUsername extends BasicGameState {
         username.setFocus(false);
         username.setConsumeEvents(false);
         username.setAcceptingInput(true);
-        username.setText("malupethbhouzx");
 
         password.setBorderColor(Color.transparent);
         password.setBackgroundColor(Color.transparent);
@@ -66,7 +63,6 @@ public class EditUsername extends BasicGameState {
         password.setFocus(false);
         password.setConsumeEvents(false);
         password.setAcceptingInput(false);
-        password.setText("swaggerzxs");
 
     }
 
@@ -87,6 +83,15 @@ public class EditUsername extends BasicGameState {
         username.render(container,g);
         password.render(container,g);
         g.drawString(mouse, 50, 100);
+        firstname.setText(CurrentUser.getFirstname());
+        lastname.setText(CurrentUser.getLastname());
+        if (noteditusername) {
+            username.setText(CurrentUser.getUsername());
+        }
+        password.setText(CurrentUser.getPassword());
+
+
+
     }
 
     @Override
@@ -98,9 +103,15 @@ public class EditUsername extends BasicGameState {
         Input input = container.getInput();	//keyboard and mouse input
 
         if(isFirstTimeUsername && username.hasFocus()) {
+            noteditusername = false;
             username.setText("");
             username.setTextColor(Color.black);
             isFirstTimeUsername = false;
+        }
+        if (!username.hasFocus() && username.getText().equals("")){
+            username.setTextColor(Color.black);
+            username.setText(CurrentUser.getUsername());
+            isFirstTimeUsername = true;
         }
         if((xpos>20 && xpos<85) && (ypos>483 && ypos<518) ){
             if(input.isMousePressed(0)){
@@ -109,7 +120,11 @@ public class EditUsername extends BasicGameState {
         }
         if((xpos>525 && xpos<572) && (ypos>184 && ypos<207) ){
             if(input.isMousePressed(0)){
-                game.enterState(8); //go to non edit state
+                if(!username.getText().contains(" ") && !username.getText().equals("")) {
+                    //TODO DATABASE
+                    CurrentUser.setUsername(username.getText());
+                    game.enterState(8); //go to non edit state
+                }
             }
         }
 
