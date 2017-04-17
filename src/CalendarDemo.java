@@ -87,4 +87,11 @@ public class CalendarDemo {
         }
         return false;
     }
+    public static String whatdate(String date) throws ParseException {
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("M/dd/yyyy");
+        Date MyDate = newDateFormat.parse("12/16/1998");
+        newDateFormat.applyPattern("EEEE");
+        String mydate = newDateFormat.format(MyDate);
+        return mydate;
+    }
 }
