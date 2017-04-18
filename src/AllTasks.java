@@ -609,7 +609,12 @@ public class AllTasks extends BasicGameState {
                 }
             } else if (isProfileSettingsSelected) {
                 if(xpos >= 53 && xpos <= 219 && ypos <= 464 && ypos >= 342){
-                    //TODO edit profile/sign out
+                    if(xpos >= 66 && xpos <= 131 && ypos <= 412 && ypos >= 391){
+                        game.enterState(8);
+                    }
+                    if (xpos >= 66 && xpos <= 117 && ypos <= 376 && ypos >= 360){
+                        game.enterState(0);
+                    }
                 } else {
                     isProfileSettingsSelected = false;
                 }
